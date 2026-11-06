@@ -10,7 +10,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import {
-  checkPhone,
   completeProfile,
   patientRequestOtp,
   patientResendOtp,
@@ -237,7 +236,7 @@ export default function LoginScreen() {
     setPhoneDigits(digits);
     if (isValidLocalMobile(digits)) {
       setPhoneError(null);
-      dispatch(checkPhone(toE164(digits)));
+      // No lookup: see phoneHint below.
     }
   };
 
@@ -342,15 +341,9 @@ export default function LoginScreen() {
     }
   };
 
-  const phoneHint = s.checkPhoneResult
-    ? !s.checkPhoneResult.exists
-      ? t.hintNewPatient
-      : s.checkPhoneResult.accountCount > 1
-        ? t.hintMultipleAccounts(s.checkPhoneResult.accountCount)
-        : s.checkPhoneResult.isOnboarded
-          ? t.hintWelcomeBack
-          : t.hintResumeRegistration
-    : null;
+  // None: saying whether a number has accounts before the OTP would tell anyone
+  // who types it in that its owner is a patient.
+  const phoneHint = null;
 
   // English / Sinhala. Not in the Figma design, but a working feature of the
   // app, so it stays — as a compact control on the sign-in brand row.
