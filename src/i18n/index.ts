@@ -122,6 +122,18 @@ export interface PortalStrings {
   profileComplete: (pct: number) => string;
   completeAction: string;
   profileCompletionHint: string;
+  referralLetters: string;
+  referralLettersHint: string;
+  letterFrom: (doctor: string) => string;
+  issuedOn: (date: string) => string;
+  expiresInTime: (time: string) => string;
+  viewLetter: string;
+  close: string;
+  letterAvailableUntil: (date: string) => string;
+  letterUnavailable: string;
+  letterLoadFailed: string;
+  screenshotsBlocked: string;
+  screenshotTaken: string;
 }
 
 const en: PortalStrings = {
@@ -237,6 +249,21 @@ const en: PortalStrings = {
   completeAction: "Complete",
   profileCompletionHint:
     "Add weight, height, email and address to help your clinic.",
+  referralLetters: "Referral letters",
+  referralLettersHint:
+    "Letters your doctor sent you. Each one can be opened for 7 days.",
+  letterFrom: (doctor) => `From ${doctor}`,
+  issuedOn: (date) => `Issued ${date}`,
+  expiresInTime: (time) => `Expires in ${time}`,
+  viewLetter: "View letter",
+  close: "Close",
+  letterAvailableUntil: (date) => `You can open this letter until ${date}.`,
+  letterUnavailable:
+    "This letter is no longer available. Please contact your clinic if you still need it.",
+  letterLoadFailed: "Couldn't open the letter. Please try again.",
+  screenshotsBlocked: "Screenshots are blocked for this letter.",
+  screenshotTaken:
+    "Screenshots of this letter aren't allowed. Your clinic chose to protect it.",
 };
 
 const si: PortalStrings = {
@@ -352,6 +379,21 @@ const si: PortalStrings = {
   completeAction: "සම්පූර්ණ කරන්න",
   profileCompletionHint:
     "ඔබගේ සායනයට උදව් වීමට බර, උස, විද්‍යුත් තැපෑල සහ ලිපිනය එක් කරන්න.",
+  referralLetters: "යොමු ලිපි",
+  referralLettersHint:
+    "ඔබේ වෛද්‍යවරයා ඔබට එවූ ලිපි. සෑම ලිපියක්ම දින 7ක් විවෘත කළ හැක.",
+  letterFrom: (doctor) => `${doctor} වෙතින්`,
+  issuedOn: (date) => `නිකුත් කළේ ${date}`,
+  expiresInTime: (time) => `${time} කින් කල් ඉකුත් වේ`,
+  viewLetter: "ලිපිය බලන්න",
+  close: "වසන්න",
+  letterAvailableUntil: (date) => `ඔබට මෙම ලිපිය ${date} දක්වා විවෘත කළ හැක.`,
+  letterUnavailable:
+    "මෙම ලිපිය තවදුරටත් ලබා ගත නොහැක. ඔබට එය තවමත් අවශ්‍ය නම් කරුණාකර ඔබේ සායනය අමතන්න.",
+  letterLoadFailed: "ලිපිය විවෘත කළ නොහැකි විය. කරුණාකර නැවත උත්සාහ කරන්න.",
+  screenshotsBlocked: "මෙම ලිපිය සඳහා තිර රූ ගැනීම අවහිර කර ඇත.",
+  screenshotTaken:
+    "මෙම ලිපියේ තිර රූ ගැනීමට ඉඩ නැත. ඔබේ සායනය එය ආරක්ෂා කිරීමට තෝරා ගත්තේය.",
 };
 
 export const PORTAL_STRINGS: Record<Lang, PortalStrings> = { en, si };

@@ -30,11 +30,22 @@ import {
   Title,
 } from "../../components/ui/Typography";
 import EditDetailsSheet from "./EditDetailsSheet";
+import ReferralLetters from "./ReferralLetters";
 import toast from "../../utils/toast";
 
 const MONTHS = [
-  "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
 ];
 
 /** "2007-02-01" → "Feb 1, 2007". Read from the ISO parts — a date of birth
@@ -59,7 +70,9 @@ function completion(p: PatientProfile): number {
     p.email,
     p.address,
   ];
-  const filled = fields.filter((v) => v !== null && v !== undefined && v !== "").length;
+  const filled = fields.filter(
+    (v) => v !== null && v !== undefined && v !== "",
+  ).length;
   return Math.round((filled / fields.length) * 100);
 }
 
@@ -100,6 +113,8 @@ export default function DashboardScreen() {
   const [refreshing, setRefreshing] = useState(false);
   const [switcherOpen, setSwitcherOpen] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
+  // Bumped on pull-to-refresh so the letters list re-reads too.
+  const [reloadKey, setReloadKey] = useState(0);
 
   const openSwitcher = () => {
     setSwitcherOpen(true);
@@ -123,7 +138,9 @@ export default function DashboardScreen() {
       toast.error(t.noChangesToSave);
       return;
     }
-    const res = await dispatch(updatePatientProfile({ token, payload: changes }));
+    const res = await dispatch(
+      updatePatientProfile({ token, payload: changes }),
+    );
     if (updatePatientProfile.fulfilled.match(res)) {
       setEditOpen(false);
       toast.success(t.profileUpdated);
@@ -151,6 +168,7 @@ export default function DashboardScreen() {
 
   const onRefresh = async () => {
     setRefreshing(true);
+    setReloadKey((k) => k + 1);
     await load();
     setRefreshing(false);
   };
@@ -169,10 +187,12 @@ export default function DashboardScreen() {
           {/* Which clinic's records these are — tappable to switch, since a
               phone can hold accounts at several clinics. */}
           {profile?.clinicName ? (
-            <Pressable onPress={openSwitcher} hitSlop={6} accessibilityRole="button">
-              <Caption numberOfLines={1}>
-                {profile.clinicName} ▾
-              </Caption>
+            <Pressable
+              onPress={openSwitcher}
+              hitSlop={6}
+              accessibilityRole="button"
+            >
+              <Caption numberOfLines={1}>{profile.clinicName} ▾</Caption>
             </Pressable>
           ) : (
             <Caption>{t.portal}</Caption>
@@ -212,7 +232,9 @@ export default function DashboardScreen() {
                   <Caption>{profile.patientCode}</Caption>
                   <Label>{formatPhone(profile.phoneNumber)}</Label>
                 </View>
-                {profile.isPhoneVerified && <BadgeVerified label={t.verified} />}
+                {profile.isPhoneVerified && (
+                  <BadgeVerified label={t.verified} />
+                )}
               </View>
 
               {pct < 100 && (
@@ -240,6 +262,16 @@ export default function DashboardScreen() {
               )}
             </View>
 
+            {/* ── Referral letters from the doctor, while they can be opened ── */}
+            {token ? (
+              <ReferralLetters
+                token={token}
+                patientCode={profile.patientCode}
+                t={t}
+                reloadKey={reloadKey}
+              />
+            ) : null}
+
             {/* ── Personal details card ────────────────────────────── */}
             <View className="overflow-hidden rounded-[20px] border border-line bg-surface">
               <View className="flex-row items-start justify-between px-5 pb-1 pt-4">
@@ -255,7 +287,10 @@ export default function DashboardScreen() {
                 </Pressable>
               </View>
               <View className="flex-row gap-4 px-5 py-3.5">
-                <Detail label={t.dateOfBirth} value={formatDob(profile.dateOfBirth)} />
+                <Detail
+                  label={t.dateOfBirth}
+                  value={formatDob(profile.dateOfBirth)}
+                />
                 <Detail label={t.gender} value={profile.gender} />
               </View>
               <View className="flex-row gap-4 border-t border-line px-5 py-3.5">

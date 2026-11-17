@@ -58,10 +58,13 @@ export default function EditDetailsSheet({
 
   const save = () => {
     const changes: Record<string, unknown> = {};
-    if (weight !== asText(profile.weight) && weight) changes.weight = parseFloat(weight);
-    if (height !== asText(profile.height) && height) changes.height = parseFloat(height);
+    if (weight !== asText(profile.weight) && weight)
+      changes.weight = parseFloat(weight);
+    if (height !== asText(profile.height) && height)
+      changes.height = parseFloat(height);
     if (email.trim() !== (profile.email ?? "")) changes.email = email.trim();
-    if (address.trim() !== (profile.address ?? "")) changes.address = address.trim();
+    if (address.trim() !== (profile.address ?? ""))
+      changes.address = address.trim();
     onSave(changes);
   };
 
@@ -77,7 +80,10 @@ export default function EditDetailsSheet({
           behavior={Platform.OS === "ios" ? "padding" : undefined}
         >
           {/* Empty onPress swallows taps so they don't reach the backdrop. */}
-          <Pressable className="rounded-t-[20px] bg-surface pb-6" onPress={() => {}}>
+          <Pressable
+            className="rounded-t-[20px] bg-surface pb-6"
+            onPress={() => {}}
+          >
             <View className="border-b border-line px-6 py-4">
               <Title>{t.personalDetails}</Title>
             </View>
